@@ -67,6 +67,30 @@
             border: 2px solid #006400 !important;
             transform: scale(1.1) !important;
         }
+        .counter-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .counter-btn {
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background-color: #ff7f50;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .counter-btn:active {
+            transform: scale(0.9);
+        }
+        .counter-value {
+            font-size: 20px;
+            margin: 0 20px;
+        }
         #randomBtn {
             width: 200px;
             height: 200px;
@@ -92,10 +116,11 @@
 
         /* 图片显示区域2*2排列 */
         .image-grid {
-            display: none;
+            display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
             margin-top: 20px;
+            display: none;
         }
         .random-image {
             width: 100%;
@@ -107,24 +132,23 @@
         /* 动画样式 */
         .animate {
             display: none;
-            width: 100%;
-            height: 100%;
             justify-content: center;
             align-items: center;
         }
 
         .gif {
-            width: 50%;
+            width: 300px;
+            height: 300px;
             transform-origin: center;
         }
 
         /* gif 动画控制 */
         @keyframes gifAnimation {
             0% {
-                opacity: 1;
+                opacity: 0;
             }
             100% {
-                opacity: 0;
+                opacity: 1;
             }
         }
 
@@ -138,7 +162,7 @@
             background-color: #ff6347;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: background 0.3s ease, transform 0.3s ease;
@@ -170,11 +194,19 @@
         <div class="button-group" id="group2-buttons">
             <button data-label="danren" class="group2-btn">独享宁静</button>
             <button data-label="qinglv" class="group2-btn">佳人相伴</button>
-            <button data-label="qinzi" class="group2-btn">居家同游</button>
+            <button data-label="qinzi" class="group2-btn">举家同游</button>
             <button data-label="zhonglaonian" class="group2-btn">乐享天年</button>
         </div>
 
-        <button id="randomBtn">抽取行程</button>
+        <!-- 数量选择器 提示语 -->
+        <div class="label-title">您此次的出行人数是：</div>
+        <div class="counter-container">
+            <button class="counter-btn" id="decrement">-</button>
+            <div class="counter-value" id="counterValue">1</div>
+            <button class="counter-btn" id="increment">+</button>
+        </div>
+
+        <button id="randomBtn">打开盲盒</button>
 
         <!-- 开盲盒动图 -->
         <div class="animate" id="animateContainer">
@@ -211,6 +243,7 @@
 
         let selectedGroup1 = null;
         let selectedGroup2 = null;
+        let counter = 1; // 默认值为1
 
         // 选择标签1
         group1Buttons.forEach(button => {
@@ -228,6 +261,25 @@
                 button.classList.add('selected');
                 selectedGroup2 = button.getAttribute('data-label');
             });
+        });
+
+        // 数量选择器
+        const decrementBtn = document.getElementById('decrement');
+        const incrementBtn = document.getElementById('increment');
+        const counterValue = document.getElementById('counterValue');
+
+        decrementBtn.addEventListener('click', () => {
+            if (counter > 1) {
+                counter--;
+                counterValue.textContent = counter;
+            }
+        });
+
+        incrementBtn.addEventListener('click', () => {
+            if (counter < 10) {
+                counter++;
+                counterValue.textContent = counter;
+            }
         });
 
         // 点击抽取按钮
